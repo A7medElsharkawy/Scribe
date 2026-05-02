@@ -1,7 +1,4 @@
-from nt import lstat
 import os
-from pydoc import text
-from pyexpat import model
 import psycopg2
 from psycopg2.extras import execute_values
 from psycopg2.pool import SimpleConnectionPool
@@ -60,7 +57,7 @@ def get_embedding(text: str)->list[float]:
 def get_batch_embedding(texts:list[str]):
     if not texts:
         return []
-    output = client.embeddings.create(input=[text], model='text-embedding-3-small')
+    output = client.embeddings.create(input=texts, model='text-embedding-3-small')
 
     return [item.embedding for item in output.data]
 
@@ -113,8 +110,8 @@ def vector_search(query: str, top_k: int = 15)-> list[dict]:
                     LIMIT %s;
                 """, (query_vector, query_vector, top_k))
             cols = ["id", "title", "abstract", "authors", "published", "categories", "similarity"]
-            return [dict(zip(cols,row)) for row in cur.fetcall()]
+            return [dict(zip(cols,row)) for row in cur.fetchall()]
     finally:
-        return_connection()
+        return_connection(conn=conn)
     
 
