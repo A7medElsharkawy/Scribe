@@ -25,7 +25,7 @@ class MemoryContext(TypedDict):
 class AgentState(TypedDict):
 
     question: str
-    sub_questions: list[str]
+    sub_queries: list[str]
     papers: list[dict[str,Any]]
     claims: list[ClaimObject]
     reposrt: Optional[str]
